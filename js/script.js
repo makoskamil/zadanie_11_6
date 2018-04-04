@@ -1,10 +1,8 @@
 $(function() {
 
-    function randomString(){
+    function randomString() {
         var chars = '0123456789abcdefghijklmnopqrstuvwxyzABCDERGHIJKLMNOPQRSTUVWXYZ';
-
         var str = '';
-
         for (var i = 0; i <10; i++) {
             str += chars[Math.floor(Math.random() * chars.legth)];
         }
@@ -19,7 +17,7 @@ $(function() {
         this.name = name;
         this.$element = createColumn();
 
-        function.createColumn() {
+        function createColumn() {
 
             var $column = $('<div>').addClass('column');
             var $columnTitle = $('<h2>').addClass('column-title').text(self.name);
@@ -88,4 +86,56 @@ $(function() {
         }
         }
     }
+    var board = {
+  // czy powinienem tę zmienną przenieść na górę?
+        name: 'Kanban Board',
+  
+        addColumn: function(column) {
+        
+            this.$element.append(column.$element);
+    
+            initSortable();
+        },
+        
+        $element: $('#board .column-container')
+    };
+
+    function initSortable() {
+        
+        $('column-card-list').sortable({
+            
+            connectWith: '.column-card-list',
+            
+            placeholder: 'card-placeholder'
+        })
+        
+        .disableSelection();
+    }
+    
+    $('.create-column')
+    .click(function)){
+        
+        var name = prompt('Enter a columne name');
+        var column = new Column(name);
+        board.addColumn(column);
+    });
+
+
+    // CREATING COLUMNS
+    var todoColumn = new Column('To do');
+    var doingColumn = new Column('Doing');
+    var doneColumn = new Column('Done');
+
+// ADDING COLUMNS TO THE BOARD
+    board.addColumn(todoColumn);
+    board.addColumn(doingColumn);
+    board.addColumn(doneColumn);
+
+// CREATING CARDS
+    var card1 = new Card('New task');
+    var card2 = new Card('Create kanban boards');
+
+// ADDING CARDS TO COLUMNS
+    todoColumn.addCard(card1);
+    doingColumn.addCard(card2);
 })
