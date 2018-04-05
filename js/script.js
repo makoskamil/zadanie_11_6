@@ -1,16 +1,15 @@
 $(function() {
-
     function randomString() {
         var chars = '0123456789abcdefghijklmnopqrstuvwxyzABCDERGHIJKLMNOPQRSTUVWXYZ';
         var str = '';
-        for (var i = 0; i <10; i++) {
+
+        for (var i = 0; i < 10; i++) {
             str += chars[Math.floor(Math.random() * chars.legth)];
         }
+
         return str;
-        //czy tu powinna być jeszcze funkcja sprawdzająca czy istnieje duplikat? bo rozumiem, że nazwa przypisywana jest losowo za każdym razem?
     }
     function Column(name) {
-
         var self = this;
 
         this.id = randomString();
@@ -18,7 +17,6 @@ $(function() {
         this.$element = createColumn();
 
         function createColumn() {
-
             var $column = $('<div>').addClass('column');
             var $columnTitle = $('<h2>').addClass('column-title').text(self.name);
             var $columnCardList = $('<ul>').addClass('column-card-list');
@@ -26,12 +24,10 @@ $(function() {
             var $columnAddCard = $('<button>').addClass('add-card').text('Add a card');
 
             $columnDelete.click(function() {
-
                 self.removeColumn();
             });
 
             $columnAddCard.click(function() {
-
                 self.addCard(new Card(prompt("Enter the name of the card")));
             });
 
@@ -40,29 +36,27 @@ $(function() {
                     .append($columnAddCard)
                     .append($columnCardList);
             return $column;
-        }
-
-        Column.prototype = {
-            
-            addCard: function(card) {
-                this.$element.children('ul').append(card.$element);
-            },
-
-            removeColumn: function() {
-                this.$element.remove();
-            }
-        };
+        }        
     }
-    function Card(description) {
 
+    Column.prototype = {        
+        addCard: function(card) {
+            this.$element.children('ul').append(card.$element);
+        },
+
+        removeColumn: function() {
+            this.$element.remove();
+        }
+    };
+
+    function Card(description) {
         var self = this;
 
         this.id = randomString();
         this.description = description;
-        this.$element = creatCard();
+        this.$element = createCard();
 
         function createCard() {
-
             var $card = $('<li>').addClass('card');
             var $cardDescription = $('<p>').addClass('card-description').text(self.description);
             var $cardDelete = $('<button>').addClass('btn-delete').text('x');
@@ -77,44 +71,32 @@ $(function() {
                 .append($cardDescription);
 
             return $card;    
-            }
-        Card.prototype = {
-
-            removeCard: function() {
-                this.$element.remove();
-            }
-        }
-        }
+        }        
     }
+
+    Card.prototype = {
+        removeCard: function() {
+            this.$element.remove();
+        }
+    };
+
     var board = {
-  // czy powinienem tę zmienną przenieść na górę?
-        name: 'Kanban Board',
-  
-        addColumn: function(column) {
-        
-            this.$element.append(column.$element);
-    
+        name: 'Kanban Board',  
+        addColumn: function(column) {        
+            this.$element.append(column.$element);    
             initSortable();
-        },
-        
+        },        
         $element: $('#board .column-container')
     };
 
-    function initSortable() {
-        
-        $('column-card-list').sortable({
-            
-            connectWith: '.column-card-list',
-            
+    function initSortable() {        
+        $('.column-card-list').sortable({            
+            connectWith: '.column-card-list',            
             placeholder: 'card-placeholder'
-        })
-        
-        .disableSelection();
+        }).disableSelection();
     }
     
-    $('.create-column')
-    .click(function)){
-        
+    $('.create-column').click(function() {
         var name = prompt('Enter a columne name');
         var column = new Column(name);
         board.addColumn(column);
